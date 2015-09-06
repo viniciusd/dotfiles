@@ -170,4 +170,3 @@ bindkey '^R' history-incremental-search-backward
 
 export EDITOR=vim
 
-function ssh () {/usr/bin/ssh -t $@ "tmux attach || tmux new";}
