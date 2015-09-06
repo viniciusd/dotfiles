@@ -102,3 +102,7 @@ PROMPT='
 $(prompt_char) '
 
 setopt INC_APPEND_HISTORY
+
+# Highlight on LESS, note you must have gnu's source-highlight
+export LESSOPEN="| /usr/bin/src-hilite-lesspipe.sh %s"
+export LESS=' -R '
