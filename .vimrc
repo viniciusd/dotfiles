@@ -17,6 +17,10 @@ syntax on
 set clipboard=unnamed
 "set clipboard=unnmaedplus
 
+" Set folding based on indentation
+set foldmethod=indent
+autocmd Syntax * normal zR
+
 " Just for safety, let us deactivate the arrows, ok? ;)
 nnoremap <Left> :echoe "Use h"<CR>
 nnoremap <Right> :echoe "Use l"<CR>
@@ -52,8 +56,35 @@ set noswapfile
 " The key C will open the selected text at visual mode in a bash, so it will be possible to copy it without copying the line numbers etc. ;)
 vnoremap C :w ! bash -c cat<CR>
 
-
+" Open some files in its respective reader 
 augroup nonvim
    au!
    au BufRead *.png,*.jpg,*.pdf,*.gif,*.xls*,*.ppt*,*.doc*,*.rtf sil exe "!open " . shellescape(expand("%:p")) | bd | let &ft=&ft
 augroup end
+
+" The width of a TAB is set to 4. Still it is a \t. It is just that Vim will
+" interpret it to be having a width of 4.
+set tabstop=4
+
+" Indents will have a width of 4
+set shiftwidth=4
+
+" A combination of spaces and tabs are used to simulate tab stops at a width
+" other than the (hard)tabstop. Sets the number of columns for a TAB
+set softtabstop=4
+
+" Expand TABs to spaces
+set expandtab
+
+" Make TAB insert indents instead of tabs at the beginning of a line
+set smarttab
+
+" Commenting blocks of code.
+autocmd FileType c,cpp,java,scala let b:comment_leader = '// '
+autocmd FileType sh,ruby,python   let b:comment_leader = '# '
+autocmd FileType conf,fstab       let b:comment_leader = '# '
+autocmd FileType tex              let b:comment_leader = '% '
+autocmd FileType mail             let b:comment_leader = '> '
+autocmd FileType vim              let b:comment_leader = '" '
+noremap <silent> ,cc :<C-B>silent <C-E>s/^/<C-R>=escape(b:comment_leader,'\/')<CR>/<CR>:nohlsearch<CR>
+noremap <silent> ,cu :<C-B>silent <C-E>s/^\V<C-R>=escape(b:comment_leader,'\/')<CR>//e<CR>:nohlsearch<CR>
