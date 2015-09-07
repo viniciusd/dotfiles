@@ -5,8 +5,23 @@ set encoding=utf-8
 set autoindent
 " It is good to know where you are in the file, right? Let's to it!
 set ruler
-" Numerating lines...
+" First, let us enable absolute line numbers
 set number
+" Relative line numbers 
+set relativenumber
+" Let us have a function to alternate between relative and absolute numbering
+function! NumberToggle()
+    set relativenumber!
+endfunc
+
+" Ctrl+n is our mapping for this function!
+nnoremap <C-n> :call NumberToggle()<cr>
+
+autocmd FocusLost * :set norelativenumber 
+autocmd FocusGained * :set relativenumber
+autocmd InsertEnter * :set norelativenumber
+autocmd InsertLeave * :set relativenumber
+
 " Sets the title of the terminal as the name of the file
 set title
 " Highlight the search cases
