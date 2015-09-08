@@ -52,6 +52,7 @@ source $ZSH/oh-my-zsh.sh
 # User configuration
 
 export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/opt/X11/bin:/opt/local/bin:/usr/texbin"
+export PYTHONPATH=~/professoresdaect
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
