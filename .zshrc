@@ -133,7 +133,16 @@ check_venv() {
         fi
     else
         # Better not auto-activating if it does not belong to you, security reasons
-        [ -f bin/activate ] && [ $(stat | awk '{print $5}') = "$USER" ] && source bin/activate
+        case $(uname -s) in
+            Darwin)
+               [ -f bin/activate ] && [ $(stat | awk '{print $5}') = "$USER" ] && source bin/activate
+                ;;
+            Linux)
+               [ -f bin/activate ] && [ $(stat --format=%U .) = "$USER" ] && source bin/activate
+               ;;
+            # CYGWIN*|MINGW32*|MSYS*)
+        esac
+
     fi
 }
 
