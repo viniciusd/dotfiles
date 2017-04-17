@@ -39,15 +39,3 @@ alias free='free -hl'
 alias vim='vim -p'
 hash vtop 2>/dev/null && alias top='vtop'
 
-
-alias tests='cd ~/Desktop/evolux_tests'
-function evolux-test {
-    unittest "test-evolux-$1"
-}
-
-alias swagger='http-server swagger-editor'
-
-
-# set PATH so it includes user's private bin directories
-PATH="$HOME/bin:$HOME/.local/bin:/usr/bin/webdrivers:$PATH"
-
