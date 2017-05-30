@@ -1,4 +1,8 @@
-" It is important ot have utf-8 as encoding, right?
+" Put plugins and dictionaries in this dir (also on Windows)
+let vimDir = '$HOME/.vim'
+let &runtimepath.=','.vimDir
+
+" It is important to have utf-8 as encoding, right?
 set encoding=utf-8
 
 " Now, something really important as well, autoidentation!
@@ -106,3 +110,15 @@ noremap <silent> ,cu :<C-B>silent <C-E>s/^\V<C-R>=escape(b:comment_leader,'\/')<
 
 "Turns off the highlighting of the current search result by hitting return
 nnoremap <CR> :noh<CR><CR>
+
+" Keep undo history across sessions by storing it in a file
+if has('persistent_undo')
+    let myUndoDir = expand(vimDir . '/undodir')
+    " Create dirs
+    call system('mkdir ' . vimDir)
+    call system('mkdir ' . myUndoDir)
+    let &undodir = myUndoDir
+    set undofile
+    set undolevels=1000
+    set undoreload=10000
+endif
