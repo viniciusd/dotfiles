@@ -122,3 +122,6 @@ if has('persistent_undo')
     set undolevels=1000
     set undoreload=10000
 endif
+
+" Removes trailing whitespaces
+autocmd FileType py autocmd BufWritePre <buffer> %s/\s\+$//e
