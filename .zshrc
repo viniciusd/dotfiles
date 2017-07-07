@@ -149,3 +149,8 @@ check_venv() {
 precmd_functions=(check_venv)
 
 [ -f $HOME/.profile ] && source $HOME/.profile
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+alias dh='dirs -v'
