@@ -16,6 +16,9 @@ Plugin 'elixir-lang/vim-elixir'
 " GO Support
 Plugin 'fatih/vim-go'
 
+" Ctrlp for searching files
+Plugin 'ctrlpvim/ctrlp.vim'
+
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -146,3 +149,11 @@ nnoremap <CR> :noh<CR><CR>
 
 " Removes trailing whitespaces 
 autocmd FileType py autocmd BufWritePre <buffer> %s/\s\+$//e
+
+" Automatically reloads vimrc when updating it from within vim
+if has ('autocmd') " Remain compatible with earlier versions, not that I am caring a lot about this
+ augroup vimrc     " Source vim configuration upon save
+    autocmd! BufWritePost $MYVIMRC source % | echom "Reloaded " . $MYVIMRC | redraw
+    autocmd! BufWritePost $MYGVIMRC if has('gui_running') | so % | echom "Reloaded " . $MYGVIMRC | endif | redraw
+  augroup END
+endif " has autocmd
