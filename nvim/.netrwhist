@@ -1,0 +1,5 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =3
+let g:netrw_dirhist_1='/Users/viniciusd/Desktop/uoft/pathfs/pathfs-pipelines/src'
+let g:netrw_dirhist_2='/Users/viniciusd/Desktop/uoft/pathfs/pathfs-experiments'
+let g:netrw_dirhist_3='/Users/viniciusd/Desktop/uoft/pathfs/pathfs-experiments/results'
