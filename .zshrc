@@ -7,10 +7,6 @@ export ZSH=$HOME/.oh-my-zsh
 # time that oh-my-zsh is loaded.
 ZSH_THEME="robbyrussell"
 
-# Uncomment the following line to change how often to auto-update (in days).
-# export UPDATE_ZSH_DAYS=13
-export DISABLE_AUTO_UPDATE=true
-
 # Uncomment the following line to enable command auto-correction.
 # ENABLE_CORRECTION="true"
 
@@ -43,8 +39,6 @@ export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/opt/X11/bin:/opt/loca
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
 
-ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[green]%}?"
-
 function prompt_char {
     git branch >/dev/null 2>/dev/null && echo '☿' && return
     hg root >/dev/null 2>/dev/null && echo '☿' && return
@@ -71,12 +65,19 @@ RPROMPT='${VIMODE}'
 setopt INC_APPEND_HISTORY
 
 # Highlight on LESS, note you must have gnu's source-highlight
-export LESSOPEN="| /usr/bin/src-hilite-lesspipe.sh %s"
+# export LESSOPEN="| src-hilite-lesspipe.sh %s"
 export LESS=' -R '
 
-# VI mode
-bindkey -v
-export KEYTIMEOUT=1
+if [ -z "$VIMRUNTIME" ]
+then
+    # VI mode
+    bindkey -v
+    export KEYTIMEOUT=1
+
+    # allow v to edit the command line (standard behaviour)
+    autoload -Uz edit-command-line
+    bindkey -M vicmd 'v' edit-command-line
+fi
 
 function zle-line-init zle-keymap-select {
     #VIM_PROMPT="%{$fg_bold[yellow]%} [% NORMAL]% %{$reset_color%}"
@@ -114,12 +115,6 @@ zle -N zle-line-finish
 zle -N zle-keymap-select
 zle -N edit-command-line
 
-bindkey -v
-
-# allow v to edit the command line (standard behaviour)
-autoload -Uz edit-command-line
-bindkey -M vicmd 'v' edit-command-line
-
 # allow ctrl-w word deletion (standard behaviour)
 bindkey '^w' backward-kill-word
 
@@ -138,26 +133,45 @@ check_venv() {
         fi
     else
         # Better not auto-activating if it does not belong to you, security reasons
-        case $(uname -s) in
-            Darwin)
-               [ -f bin/activate ] && [ $(stat | awk '{print $5}') = "$USER" ] && source bin/activate
-                ;;
-            Linux)
-               [ -f bin/activate ] && [ $(stat --format=%U .) = "$USER" ] && source bin/activate
-               ;;
-            # CYGWIN*|MINGW32*|MSYS*)
-        esac
-
+        [ -f bin/activate ] && [ $(stat | awk '{print $5}') = "$USER" ] && source bin/activate
     fi
 }
 
 precmd_functions=(check_venv)
 
+_direnv_hook() {
+  eval "$("/usr/local/bin/direnv" export zsh)";
+}
+
+typeset -ag precmd_functions;
+
+if hash direnv 2>/dev/null
+then
+    if [[ -z ${precmd_functions[(r)_direnv_hook]} ]]
+    then
+      precmd_functions+=_direnv_hook;
+    fi
+fi
+
 [ -f $HOME/.profile ] && source $HOME/.profile
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+# On OS X, path_helper builds PATH based on /etc/paths.d and /etc/manpaths.d
+if [ -x /usr/libexec/path_helper ]; then
+        eval `/usr/libexec/path_helper -s`
+fi
 
-alias dh='dirs -v'
+alias vim='vim -p'
 
-export GIT_CEILING_DIRECTORIES=$HOME
+setopt noincappendhistory
+setopt nosharehistory
+
+# tabtab source for serverless package
+# uninstall by removing these lines or running `tabtab uninstall serverless`
+[[ -f /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.zsh ]] && . /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.zsh
+# tabtab source for sls package
+# uninstall by removing these lines or running `tabtab uninstall sls`
+[[ -f /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.zsh ]] && . /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.zsh
+
+. $HOME/.asdf/asdf.sh
+
+. $HOME/.asdf/completions/asdf.bash
