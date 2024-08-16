@@ -58,7 +58,7 @@ ZSH_THEME_GIT_PROMPT_CLEAN=""
 VIMODE='[i]'
 
 PROMPT='
-%{$fg[magenta]%}%n%{$reset_color%} at %{$fg[yellow]%}%m%{$reset_color%} in %{$fg_bold[green]%}$(collapse_pwd)%{$reset_color%}$(hg_prompt_info)$(git_prompt_info)
+%{$fg_bold[red]%}$(arch)%{$reset_color%} %{$fg[magenta]%}%n%{$reset_color%} at %{$fg[yellow]%}%m%{$reset_color%} in %{$fg_bold[green]%}$(collapse_pwd)%{$reset_color%}$(hg_prompt_info)$(git_prompt_info)
 $(prompt_char) '
 RPROMPT='${VIMODE}'
 
@@ -160,7 +160,7 @@ if [ -x /usr/libexec/path_helper ]; then
         eval `/usr/libexec/path_helper -s`
 fi
 
-alias vim='vim -p'
+alias vim='nvim -p'
 
 setopt noincappendhistory
 setopt nosharehistory
@@ -174,4 +174,9 @@ setopt nosharehistory
 
 . $HOME/.asdf/asdf.sh
 
-. $HOME/.asdf/completions/asdf.bash
+# . $HOME/.asdf/completions/asdf.bash
+# append completions to fpath
+fpath=(${ASDF_DIR}/completions $fpath)
+# initialise completions with ZSH's compinit
+autoload -Uz compinit && compinit
+hash vtop 2>/dev/null && alias top='vtop'
