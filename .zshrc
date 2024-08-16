@@ -180,3 +180,29 @@ fpath=(${ASDF_DIR}/completions $fpath)
 # initialise completions with ZSH's compinit
 autoload -Uz compinit && compinit
 hash vtop 2>/dev/null && alias top='vtop'
+
+# Multiple Homebrews on Apple Silicon
+if [ "$(arch)" = "arm64" ]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+    export PATH="/opt/homebrew/opt/python@3.8/bin:$PATH"
+    # export LDFLAGS="-L/opt/homebrew/opt/python@3.8/lib" # For compilers to find python@3.8
+    export PATH="/bin:/opt/homebrew:/opt/homebrew/bin/:$PATH"
+else
+    eval "$(/usr/local/bin/brew shellenv)"
+    export PATH="/usr/local/opt/python@3.7/bin:$PATH"
+    export PATH="/usr/local/opt/python@3.9/bin:$PATH"
+    # export LDFLAGS="-L/usr/local/opt/python@3.7/lib" # For compilers to find python@3.7
+    export PATH="/bin:/usr/local/bin/:$PATH"
+fi
+export LDFLAGS="-L$(brew --prefix)/lib"
+export CPPFLAGS="-I$(brew --prefix)/include"
+export LIBRARY_PATH="$(brew --prefix)/lib:$LIBRARY_PATH"
+export CPATH=$(brew --prefix)/include
+export C_INCLUDE_PATH=$(brew --prefix)/include
+export CPLUS_INCLUDE_PATH=$(brew --prefix)/include
+export OBJC_INCLUDE_PATH=$(brew --prefix)/include
+export DYLD_FALLBACK_LIBRARY_PATH=$(brew --prefix)/lib
+export CC=$(brew --prefix llvm)/bin/clang
+export CXX=$(brew --prefix llvm)/bin/clang++
+export CMAKE_OSX_ARCHITECTURES=arm64
+export CMAKE_APPLE_SILICON_PROCESSOR=1
